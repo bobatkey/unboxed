@@ -1,0 +1,11 @@
+# OASIS_START
+# DO NOT EDIT (digest: e3e80fd5b8e451a4d5672d388088ee32)
+version = "0.1"
+description = "Unboxed arrays with monomorphic and polymorphic elements"
+archive(byte) = "unboxed-array.cma"
+archive(byte, plugin) = "unboxed-array.cma"
+archive(native) = "unboxed-array.cmxa"
+archive(native, plugin) = "unboxed-array.cmxs"
+exists_if = "unboxed-array.cma"
+# OASIS_STOP
+
