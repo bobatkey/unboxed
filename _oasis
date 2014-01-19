@@ -3,7 +3,7 @@ Name:        Unboxed Array
 Version:     0.1
 Synopsis:    Unboxed arrays with monomorphic and polymorphic elements
 Authors:     Robert Atkey <bob.atkey@gmail.com>
-License:     GPL3
+License:     BSD3
 Plugins:     META (0.3)
 BuildTools:  ocamlbuild
 
