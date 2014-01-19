@@ -134,9 +134,6 @@ a fairly natural way:
 ````ocaml
 # let arr = A.create 10 (Data (Empty, ()));;
 val arr : A.t = <abstr>
-# A.set arr 0 (Data (Value (1, "foo")));;
-Error: The constructor Data expects 2 argument(s),
-       but is applied here to 1 argument(s)
 # A.set arr 0 (Data (Value, (1, "foo")));;
 - : unit = ()
 # A.set arr 5 (Data (Deleted, ()));;
