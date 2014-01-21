@@ -124,7 +124,7 @@ struct
     in
     search 0
 
-  let remove (type a) ({table} : a t) key =
+  let remove (type a) ({table} as t : a t) key =
     let table_size = Table.length table in
     let base = T.hash key mod table_size in
     let rec search_and_delete step =
@@ -135,6 +135,7 @@ struct
           | Data (Empty, ()) ->
             ()
           | Data (Value, (key', value)) when T.equal key key' ->
+            t.entry_count <- t.entry_count - 1;
             Table.set table idx (Data (Deleted, ()))
           | Data (Value, _) ->
             search_and_delete (step+1)
