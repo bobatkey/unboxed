@@ -35,12 +35,14 @@ end
 
 module type S = sig
   type t
-  type elt 
+  type elt
+  val empty  : t
   val create : int -> elt -> t
   val init   : int -> (int -> elt) -> t
   val get    : t -> int -> elt
   val set    : t -> int -> elt -> unit
   val length : t -> int
+  val copy   : t -> t
 end
 
 module Make (Elt : Element_Descriptor) : S with type elt = Elt.t
@@ -58,11 +60,13 @@ end
 module type S1 = sig
   type 'a t
   type 'a elt
+  val empty  : 'a t
   val create : int -> 'a elt -> 'a t
   val init   : int -> (int -> 'a elt) -> 'a t
   val get    : 'a t -> int -> 'a elt
   val set    : 'a t -> int -> 'a elt -> unit
   val length : 'a t -> int
+  val copy   : 'a t -> 'a t
 end
 
 module Make1 (Elt : Element_Descriptor_1) : S1 with type 'a elt = 'a Elt.t

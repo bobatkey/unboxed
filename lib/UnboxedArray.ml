@@ -31,12 +31,14 @@ end
 
 module type S = sig
   type t
-  type elt 
+  type elt
+  val empty : t
   val create : int -> elt -> t
   val init : int -> (int -> elt) -> t
   val get : t -> int -> elt
   val set : t -> int -> elt -> unit
   val length : t -> int
+  val copy : t -> t
 end
 
 module Make (D : Element_Descriptor)
@@ -50,6 +52,8 @@ struct
   type t = Obj.t array
 
   type elt = D.t
+
+  let empty = [| |]
 
   let set array i elt =
     let offset = i * elem_size in
@@ -140,6 +144,9 @@ struct
   let length t =
     Array.length t / elem_size
 
+  let copy t =
+    Array.copy t
+
 end
 
 (**********************************************************************)
@@ -154,11 +161,13 @@ end
 module type S1 = sig
   type 'a t
   type 'a elt
+  val empty : 'a t
   val create : int -> 'a elt -> 'a t
   val init : int -> (int -> 'a elt) -> 'a t
   val get : 'a t -> int -> 'a elt
   val set : 'a t -> int -> 'a elt -> unit
   val length : 'a t -> int
+  val copy : 'a t -> 'a t
 end
 
 module Make1 (D : Element_Descriptor_1)
@@ -172,6 +181,8 @@ struct
   type 'a t = Obj.t array
 
   type 'a elt = 'a D.t
+
+  let empty = [| |]
 
   let set array i elt =
     let offset = i * elem_size in
@@ -262,5 +273,8 @@ struct
 
   let length t =
     Array.length t / elem_size
+
+  let copy t =
+    Array.copy t
 
 end
