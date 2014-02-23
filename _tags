@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: 369596da6a80dce2255e31c3759cfae8)
+# DO NOT EDIT (digest: f8b9fa91be5bc5b9b1663de9c0fd0133)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -13,6 +13,6 @@
 ".git": not_hygienic
 "_darcs": -traverse
 "_darcs": not_hygienic
-# Library unboxed-array
-"lib/unboxed-array.cmxs": use_unboxed-array
+# Library unboxed
+"lib/unboxed.cmxs": use_unboxed
 # OASIS_STOP

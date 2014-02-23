@@ -27,7 +27,7 @@ module Make (T : Hashable) : S with type key = T.t
 struct
 
   module Elt = struct
-    open UnboxedArray
+    open Unboxed
 
     type ('a,'d) constructor =
       | Empty   : ('a, unit) constructor
@@ -46,7 +46,7 @@ struct
     type 'a t = Data : ('a,'d) constructor * 'd -> 'a t
   end
 
-  module Table = UnboxedArray.Make1 (Elt)
+  module Table = Unboxed.PolymorphicVariantArray.Make (Elt)
 
   open Elt
 

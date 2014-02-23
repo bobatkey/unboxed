@@ -1,5 +1,5 @@
 OASISFormat: 0.3
-Name:        Unboxed Array
+Name:        Unboxed
 Version:     0.1
 Synopsis:    Unboxed arrays with monomorphic and polymorphic elements
 Authors:     Robert Atkey <bob.atkey@gmail.com>
@@ -7,6 +7,6 @@ License:     BSD3
 Plugins:     META (0.3)
 BuildTools:  ocamlbuild
 
-Library "unboxed-array"
+Library "unboxed"
   Path:    lib
-  Modules: UnboxedArray
+  Modules: Unboxed
