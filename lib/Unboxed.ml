@@ -1,3 +1,6 @@
+let index_out_of_bounds =
+  Invalid_argument "index out of bounds"
+
 (**********************************************************************)
 type zero    = Zero
 type 'n succ = Succ of 'n
@@ -34,114 +37,114 @@ let int_of_width (type a) (type s) : (a, s) width -> int = function
 let primitive_get (type a) (type size) array offset : (a,size) width -> a =
   function
   | Width0 -> ()
-  | Width1 -> (Obj.obj array.(offset))
-  | Width2 -> (Obj.obj array.(offset),
-               Obj.obj array.(offset+1))
-  | Width3 -> (Obj.obj array.(offset),
-               Obj.obj array.(offset+1),
-               Obj.obj array.(offset+2))
-  | Width4 -> (Obj.obj array.(offset),
-               Obj.obj array.(offset+1),
-               Obj.obj array.(offset+2),
-               Obj.obj array.(offset+3))
-  | Width5 -> (Obj.obj array.(offset),
-               Obj.obj array.(offset+1),
-               Obj.obj array.(offset+2),
-               Obj.obj array.(offset+3),
-               Obj.obj array.(offset+4))
-  | Width6 -> (Obj.obj array.(offset),
-               Obj.obj array.(offset+1),
-               Obj.obj array.(offset+2),
-               Obj.obj array.(offset+3),
-               Obj.obj array.(offset+4),
-               Obj.obj array.(offset+5))
-  | Width7 -> (Obj.obj array.(offset),
-               Obj.obj array.(offset+1),
-               Obj.obj array.(offset+2),
-               Obj.obj array.(offset+3),
-               Obj.obj array.(offset+4),
-               Obj.obj array.(offset+5),
-               Obj.obj array.(offset+6))
+  | Width1 -> (Obj.obj (Array.unsafe_get array (offset)))
+  | Width2 -> (Obj.obj (Array.unsafe_get array (offset)),
+               Obj.obj (Array.unsafe_get array (offset+1)))
+  | Width3 -> (Obj.obj (Array.unsafe_get array (offset)),
+               Obj.obj (Array.unsafe_get array (offset+1)),
+               Obj.obj (Array.unsafe_get array (offset+2)))
+  | Width4 -> (Obj.obj (Array.unsafe_get array (offset)),
+               Obj.obj (Array.unsafe_get array (offset+1)),
+               Obj.obj (Array.unsafe_get array (offset+2)),
+               Obj.obj (Array.unsafe_get array (offset+3)))
+  | Width5 -> (Obj.obj (Array.unsafe_get array (offset)),
+               Obj.obj (Array.unsafe_get array (offset+1)),
+               Obj.obj (Array.unsafe_get array (offset+2)),
+               Obj.obj (Array.unsafe_get array (offset+3)),
+               Obj.obj (Array.unsafe_get array (offset+4)))
+  | Width6 -> (Obj.obj (Array.unsafe_get array (offset)),
+               Obj.obj (Array.unsafe_get array (offset+1)),
+               Obj.obj (Array.unsafe_get array (offset+2)),
+               Obj.obj (Array.unsafe_get array (offset+3)),
+               Obj.obj (Array.unsafe_get array (offset+4)),
+               Obj.obj (Array.unsafe_get array (offset+5)))
+  | Width7 -> (Obj.obj (Array.unsafe_get array (offset)),
+               Obj.obj (Array.unsafe_get array (offset+1)),
+               Obj.obj (Array.unsafe_get array (offset+2)),
+               Obj.obj (Array.unsafe_get array (offset+3)),
+               Obj.obj (Array.unsafe_get array (offset+4)),
+               Obj.obj (Array.unsafe_get array (offset+5)),
+               Obj.obj (Array.unsafe_get array (offset+6)))
 
 let primitive_set (type a) (type size) array offset (value : a) (width : (a,size) width) : unit =
   match width, value with
   | Width0, ()    ->
      ()
   | Width1, a     ->
-     array.(offset) <- Obj.repr a
+     Array.unsafe_set array (offset) (Obj.repr a)
   | Width2, (a,b) ->
-     array.(offset) <- Obj.repr a;
-     array.(offset+1) <- Obj.repr b
+     Array.unsafe_set array (offset) (Obj.repr a);
+     Array.unsafe_set array (offset+1) (Obj.repr b)
   | Width3, (a,b,c) ->
-     array.(offset) <- Obj.repr a;
-     array.(offset+1) <- Obj.repr b;
-     array.(offset+2) <- Obj.repr c
+     Array.unsafe_set array (offset) (Obj.repr a);
+     Array.unsafe_set array (offset+1) (Obj.repr b);
+     Array.unsafe_set array (offset+2) (Obj.repr c)
   | Width4, (a,b,c,d) ->
-     array.(offset) <- Obj.repr a;
-     array.(offset+1) <- Obj.repr b;
-     array.(offset+2) <- Obj.repr c;
-     array.(offset+3) <- Obj.repr d
+     Array.unsafe_set array (offset) (Obj.repr a);
+     Array.unsafe_set array (offset+1) (Obj.repr b);
+     Array.unsafe_set array (offset+2) (Obj.repr c);
+     Array.unsafe_set array (offset+3) (Obj.repr d)
   | Width5, (a,b,c,d,e) ->
-     array.(offset) <- Obj.repr a;
-     array.(offset+1) <- Obj.repr b;
-     array.(offset+2) <- Obj.repr c;
-     array.(offset+3) <- Obj.repr d;
-     array.(offset+4) <- Obj.repr e
+     Array.unsafe_set array (offset) (Obj.repr a);
+     Array.unsafe_set array (offset+1) (Obj.repr b);
+     Array.unsafe_set array (offset+2) (Obj.repr c);
+     Array.unsafe_set array (offset+3) (Obj.repr d);
+     Array.unsafe_set array (offset+4) (Obj.repr e)
   | Width6, (a,b,c,d,e,f) ->
-     array.(offset) <- Obj.repr a;
-     array.(offset+1) <- Obj.repr b;
-     array.(offset+2) <- Obj.repr c;
-     array.(offset+3) <- Obj.repr d;
-     array.(offset+4) <- Obj.repr e;
-     array.(offset+5) <- Obj.repr f;
+     Array.unsafe_set array (offset) (Obj.repr a);
+     Array.unsafe_set array (offset+1) (Obj.repr b);
+     Array.unsafe_set array (offset+2) (Obj.repr c);
+     Array.unsafe_set array (offset+3) (Obj.repr d);
+     Array.unsafe_set array (offset+4) (Obj.repr e);
+     Array.unsafe_set array (offset+5) (Obj.repr f);
   | Width7, (a,b,c,d,e,f,g) ->
-     array.(offset) <- Obj.repr a;
-     array.(offset+1) <- Obj.repr b;
-     array.(offset+2) <- Obj.repr c;
-     array.(offset+3) <- Obj.repr d;
-     array.(offset+4) <- Obj.repr e;
-     array.(offset+5) <- Obj.repr f;
-     array.(offset+6) <- Obj.repr g
+     Array.unsafe_set array (offset) (Obj.repr a);
+     Array.unsafe_set array (offset+1) (Obj.repr b);
+     Array.unsafe_set array (offset+2) (Obj.repr c);
+     Array.unsafe_set array (offset+3) (Obj.repr d);
+     Array.unsafe_set array (offset+4) (Obj.repr e);
+     Array.unsafe_set array (offset+5) (Obj.repr f);
+     Array.unsafe_set array (offset+6) (Obj.repr g)
 
 let primitive_unset (type a) (type size) array offset (width : (a,size) width) : unit =
   match width with
   | Width0    ->
      ()
   | Width1     ->
-     array.(offset) <- Obj.repr 0
+     Array.unsafe_set array (offset) (Obj.repr 0)
   | Width2 ->
-     array.(offset) <- Obj.repr 0;
-     array.(offset+1) <- Obj.repr 0
+     Array.unsafe_set array (offset) (Obj.repr 0);
+     Array.unsafe_set array (offset+1) (Obj.repr 0)
   | Width3 ->
-     array.(offset) <- Obj.repr 0;
-     array.(offset+1) <- Obj.repr 0;
-     array.(offset+2) <- Obj.repr 0
+     Array.unsafe_set array (offset) (Obj.repr 0);
+     Array.unsafe_set array (offset+1) (Obj.repr 0);
+     Array.unsafe_set array (offset+2) (Obj.repr 0)
   | Width4 ->
-     array.(offset) <- Obj.repr 0;
-     array.(offset+1) <- Obj.repr 0;
-     array.(offset+2) <- Obj.repr 0;
-     array.(offset+3) <- Obj.repr 0
+     Array.unsafe_set array (offset) (Obj.repr 0);
+     Array.unsafe_set array (offset+1) (Obj.repr 0);
+     Array.unsafe_set array (offset+2) (Obj.repr 0);
+     Array.unsafe_set array (offset+3) (Obj.repr 0)
   | Width5 ->
-     array.(offset) <- Obj.repr 0;
-     array.(offset+1) <- Obj.repr 0;
-     array.(offset+2) <- Obj.repr 0;
-     array.(offset+3) <- Obj.repr 0;
-     array.(offset+4) <- Obj.repr 0
+     Array.unsafe_set array (offset) (Obj.repr 0);
+     Array.unsafe_set array (offset+1) (Obj.repr 0);
+     Array.unsafe_set array (offset+2) (Obj.repr 0);
+     Array.unsafe_set array (offset+3) (Obj.repr 0);
+     Array.unsafe_set array (offset+4) (Obj.repr 0)
   | Width6 ->
-     array.(offset) <- Obj.repr 0;
-     array.(offset+1) <- Obj.repr 0;
-     array.(offset+2) <- Obj.repr 0;
-     array.(offset+3) <- Obj.repr 0;
-     array.(offset+4) <- Obj.repr 0;
-     array.(offset+5) <- Obj.repr 0
+     Array.unsafe_set array (offset) (Obj.repr 0);
+     Array.unsafe_set array (offset+1) (Obj.repr 0);
+     Array.unsafe_set array (offset+2) (Obj.repr 0);
+     Array.unsafe_set array (offset+3) (Obj.repr 0);
+     Array.unsafe_set array (offset+4) (Obj.repr 0);
+     Array.unsafe_set array (offset+5) (Obj.repr 0)
   | Width7 ->
-     array.(offset) <- Obj.repr 0;
-     array.(offset+1) <- Obj.repr 0;
-     array.(offset+2) <- Obj.repr 0;
-     array.(offset+3) <- Obj.repr 0;
-     array.(offset+4) <- Obj.repr 0;
-     array.(offset+5) <- Obj.repr 0;
-     array.(offset+6) <- Obj.repr 0
+     Array.unsafe_set array (offset) (Obj.repr 0);
+     Array.unsafe_set array (offset+1) (Obj.repr 0);
+     Array.unsafe_set array (offset+2) (Obj.repr 0);
+     Array.unsafe_set array (offset+3) (Obj.repr 0);
+     Array.unsafe_set array (offset+4) (Obj.repr 0);
+     Array.unsafe_set array (offset+5) (Obj.repr 0);
+     Array.unsafe_set array (offset+6) (Obj.repr 0)
 
 (**********************************************************************)
 module MonomorphicVariantArray = struct
@@ -183,6 +186,8 @@ module MonomorphicVariantArray = struct
 
     let set array i elt =
       let offset = i * elem_size in
+      if offset < 0 || offset >= Array.length array then
+        raise index_out_of_bounds;
       match elt with
       | Data (constructor, value) ->
          array.(offset) <- Obj.repr constructor;
@@ -190,6 +195,8 @@ module MonomorphicVariantArray = struct
 
     let get array i =
       let offset = i * elem_size in
+      if offset < 0 || offset >= Array.length array then
+        raise index_out_of_bounds;
       let constructor = Obj.obj (Array.get array offset) in
       Data (constructor, primitive_get array (offset+1) (width_of constructor))
 
@@ -273,12 +280,12 @@ module MonomorphicVariantDynArray = struct
 
     let set t i elt =
       if i < 0 || i >= t.end_ptr then
-        raise (Invalid_argument "index out of bounds");
+        raise index_out_of_bounds;
       D_Array.set t.elements i elt
 
     let get t i =
       if i < 0 || i >= t.end_ptr then
-        raise (Invalid_argument "index out of bounds");
+        raise index_out_of_bounds;
       D_Array.get t.elements i
 
     let length t =
@@ -335,6 +342,8 @@ module PolymorphicVariantArray = struct
 
     let set array i elt =
       let offset = i * elem_size in
+      if offset < 0 || offset >= Array.length array then
+        raise index_out_of_bounds;
       match elt with
       | Data (constructor, value) ->
          array.(offset) <- Obj.repr constructor;
@@ -342,6 +351,8 @@ module PolymorphicVariantArray = struct
 
     let get array i =
       let offset = i * elem_size in
+      if offset < 0 || offset >= Array.length array then
+        raise index_out_of_bounds;
       let constructor = Obj.obj (Array.get array offset) in
       Data (constructor, primitive_get array (offset+1) (width_of constructor))
 
@@ -413,13 +424,13 @@ module TupleArray = struct
     let get a i =
       let offset = i * elt_size in
       if offset < 0 || offset >= Array.length a then
-        raise (Invalid_argument "index out of bounds");
+        raise index_out_of_bounds;
       primitive_get a offset width
 
     let set a i v =
       let offset = i * elt_size in
       if offset < 0 || offset >= Array.length a then
-        raise (Invalid_argument "index out of bounds");
+        raise index_out_of_bounds;
       primitive_set a offset v width
   end
 end
@@ -477,12 +488,12 @@ module PartialTupleArray = struct
 
     let get array i =
       if i < 0 then
-        raise (Invalid_argument "index out of bounds");
+        raise index_out_of_bounds;
       let chunk_start  = (i / 31) * chunk_size in
       let chunk_offset = i mod 31 in
       let offset       = chunk_start + 1 + chunk_offset*elt_size in
       if offset >= Array.length array then
-        raise (Invalid_argument "index out of bounds");
+        raise index_out_of_bounds;
       let header = Obj.obj array.(chunk_start) in
       if header land (1 lsl chunk_offset) <> 0 then
         Some (primitive_get array offset width)
@@ -491,24 +502,24 @@ module PartialTupleArray = struct
 
     let set array i elt =
       if i < 0 then
-        raise (Invalid_argument "index out of bounds");
+        raise index_out_of_bounds;
       let chunk_start  = (i / 31) * chunk_size in
       let chunk_offset = i mod 31 in
       let offset = chunk_start + 1 + chunk_offset*elt_size in
       if offset >= Array.length array then
-        raise (Invalid_argument "index out of bounds");
+        raise index_out_of_bounds;
       let header = Obj.obj array.(chunk_start) in
       array.(chunk_start) <- Obj.repr (header lor (1 lsl chunk_offset));
       primitive_set array offset elt width
 
     let clear array i =
       if i < 0 then
-        raise (Invalid_argument "index out of bounds");
+        raise index_out_of_bounds;
       let chunk_start  = (i / 31) * chunk_size in
       let chunk_offset = i mod 31 in
       let offset = chunk_start + 1 + chunk_offset*elt_size in
       if offset >= Array.length array then
-        raise (Invalid_argument "index out of bounds");
+        raise index_out_of_bounds;
       let header = Obj.obj array.(chunk_start) in
       array.(chunk_start) <- Obj.repr (header land (lnot (1 lsl chunk_offset)));
       primitive_unset array offset width
