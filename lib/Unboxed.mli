@@ -118,6 +118,32 @@ module PolymorphicVariantArray : sig
          : S with module Elt = Elt
 end
 
+(**{2 Arrays of unboxed tuples} *)
+
+module TupleArray : sig
+  module type Element_Descriptor =
+    sig
+      type t
+      type size
+      val width : (t,size) width
+    end
+
+  module type S =
+    sig
+      module Elt : Element_Descriptor
+
+      type t
+      type elt = Elt.t
+
+      val create : int -> (int -> elt) -> t
+      val get    : t -> int -> elt
+      val set    : t -> int -> elt -> unit
+    end
+
+  module Make (Elt : Element_Descriptor)
+         : S with module Elt = Elt
+end
+
 (**{2 Arrays of unboxed tuples with missing elements} *)
 
 module PartialTupleArray : sig

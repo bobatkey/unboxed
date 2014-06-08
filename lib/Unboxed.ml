@@ -369,6 +369,61 @@ module PolymorphicVariantArray = struct
 end
 
 (**********************************************************************)
+module TupleArray = struct
+  module type Element_Descriptor =
+    sig
+      type t
+      type size
+      val width : (t,size) width
+    end
+
+  module type S =
+    sig
+      module Elt : Element_Descriptor
+
+      type t
+      type elt = Elt.t
+
+      val create : int -> (int -> elt) -> t
+      val get    : t -> int -> elt
+      val set    : t -> int -> elt -> unit
+    end
+
+  module Make (Elt : Element_Descriptor) = struct
+    module Elt = Elt
+    open Elt
+
+    let elt_size =
+      int_of_width width
+
+    type t = Obj.t array
+
+    type elt = Elt.t
+
+    let create length init_f =
+      let a = Array.make (length * elt_size) (Obj.repr 0) in
+      let rec init_loop i offset =
+        if i < length then
+          (primitive_set a offset (init_f i) width;
+           init_loop (i+1) (offset + elt_size))
+      in
+      init_loop 0 0;
+      a
+
+    let get a i =
+      let offset = i * elt_size in
+      if offset < 0 || offset >= Array.length a then
+        raise (Invalid_argument "index out of bounds");
+      primitive_get a offset width
+
+    let set a i v =
+      let offset = i * elt_size in
+      if offset < 0 || offset >= Array.length a then
+        raise (Invalid_argument "index out of bounds");
+      primitive_set a offset v width
+  end
+end
+
 module PartialTupleArray = struct
   module type Element_Descriptor =
     sig
