@@ -9,10 +9,10 @@ type _ is_a_natural =
   | Zero :                       zero is_a_natural
   | Succ : 'n is_a_natural -> 'n succ is_a_natural
 
-let rec int_of_natural : 'n. 'n is_a_natural -> int =
-  fun (type n) (n : n is_a_natural) -> match n with
-    | Zero   -> 0
-    | Succ n -> 1 + int_of_natural n
+let rec int_of_natural : type n. n is_a_natural -> int =
+  function
+  | Zero   -> 0
+  | Succ n -> 1 + int_of_natural n
 
 type (_, _) width =
   | Width0 : (unit, 'n) width
@@ -66,7 +66,7 @@ let primitive_get (type a) (type size) array offset : (a,size) width -> a =
                Obj.obj (Array.unsafe_get array (offset+5)),
                Obj.obj (Array.unsafe_get array (offset+6)))
 
-let primitive_set (type a) (type size) array offset (value : a) (width : (a,size) width) : unit =
+let primitive_set (type a) (type size) array offset (value : a) (width : (a,size) width) =
   match width, value with
   | Width0, ()    ->
      ()
