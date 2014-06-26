@@ -50,6 +50,9 @@ module MonomorphicVariantArray : sig
       val set    : t -> int -> elt -> unit
       val length : t -> int
       val copy   : t -> t
+      val map    : (elt -> elt) -> t -> t
+      val mapi   : (int -> elt -> elt) -> t -> t
+      val blit   : src:t -> src_pos:int -> dst:t -> dst_pos:int -> len:int -> unit
     end
 
   module Make (Elt : Element_Descriptor)
@@ -112,6 +115,9 @@ module PolymorphicVariantArray : sig
       val set    : 'a t -> int -> 'a elt -> unit
       val length : 'a t -> int
       val copy   : 'a t -> 'a t
+      val map    : ('a elt -> 'b elt) -> 'a t -> 'b t
+      val mapi   : (int -> 'a elt -> 'b elt) -> 'a t -> 'b t
+      val blit   : src:'a t -> src_pos:int -> dst:'a t -> dst_pos:int -> len:int -> unit
     end
 
   module Make (Elt : Element_Descriptor)

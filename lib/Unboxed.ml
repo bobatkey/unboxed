@@ -170,6 +170,9 @@ module MonomorphicVariantArray = struct
       val set : t -> int -> elt -> unit
       val length : t -> int
       val copy : t -> t
+      val map : (elt -> elt) -> t -> t
+      val mapi : (int -> elt -> elt) -> t -> t
+      val blit : src:t -> src_pos:int -> dst:t -> dst_pos:int -> len:int -> unit
     end
 
   module Make (D : Element_Descriptor) = struct
@@ -220,6 +223,49 @@ module MonomorphicVariantArray = struct
     let copy t =
       Array.copy t
 
+    let map f array =
+      let array = Array.copy array in
+      let rec loop offset =
+        if offset < Array.length array then
+          let constructor = Obj.obj (Array.unsafe_get array offset) in
+          let elt =
+            Data (constructor,
+                  primitive_get array (offset+1) (width_of constructor))
+          in
+          (match f elt with
+            | Data (constructor, value) ->
+               Array.unsafe_set array offset (Obj.repr constructor);
+               primitive_set array (offset+1) value (width_of constructor));
+          loop (offset+elem_size)
+      in
+      loop 0;
+      array
+
+    let mapi f array =
+      let array = Array.copy array in
+      let rec loop i offset =
+        if offset < Array.length array then
+          let constructor = Obj.obj (Array.unsafe_get array offset) in
+          let elt =
+            Data (constructor,
+                  primitive_get array (offset+1) (width_of constructor))
+          in
+          (match f i elt with
+            | Data (constructor, value) ->
+               Array.unsafe_set array offset (Obj.repr constructor);
+               primitive_set array (offset+1) value (width_of constructor));
+          loop (i+1) (offset+elem_size)
+      in
+      loop 0 0;
+      array
+
+    let blit ~src ~src_pos ~dst ~dst_pos ~len =
+      ArrayLabels.blit
+        ~src
+        ~src_pos:(src_pos * elem_size)
+        ~dst
+        ~dst_pos:(dst_pos * elem_size)
+        ~len:(len * elem_size)
   end
 end
 
@@ -326,6 +372,9 @@ module PolymorphicVariantArray = struct
       val set : 'a t -> int -> 'a elt -> unit
       val length : 'a t -> int
       val copy : 'a t -> 'a t
+      val map : ('a elt -> 'b elt) -> 'a t -> 'b t
+      val mapi : (int -> 'a elt -> 'b elt) -> 'a t -> 'b t
+      val blit   : src:'a t -> src_pos:int -> dst:'a t -> dst_pos:int -> len:int -> unit
     end
 
   module Make (D : Element_Descriptor) = struct
@@ -376,6 +425,49 @@ module PolymorphicVariantArray = struct
     let copy t =
       Array.copy t
 
+    let map f array =
+      let array = Array.copy array in
+      let rec loop offset =
+        if offset < Array.length array then
+          let constructor = Obj.obj (Array.unsafe_get array offset) in
+          let elt =
+            Data (constructor,
+                  primitive_get array (offset+1) (width_of constructor))
+          in
+          (match f elt with
+            | Data (constructor, value) ->
+               Array.unsafe_set array offset (Obj.repr constructor);
+               primitive_set array (offset+1) value (width_of constructor));
+          loop (offset+elem_size)
+      in
+      loop 0;
+      array
+
+    let mapi f array =
+      let array = Array.copy array in
+      let rec loop i offset =
+        if offset < Array.length array then
+          let constructor = Obj.obj (Array.unsafe_get array offset) in
+          let elt =
+            Data (constructor,
+                  primitive_get array (offset+1) (width_of constructor))
+          in
+          (match f i elt with
+            | Data (constructor, value) ->
+               Array.unsafe_set array offset (Obj.repr constructor);
+               primitive_set array (offset+1) value (width_of constructor));
+          loop (i+1) (offset+elem_size)
+      in
+      loop 0 0;
+      array
+
+    let blit ~src ~src_pos ~dst ~dst_pos ~len =
+      ArrayLabels.blit
+        ~src
+        ~src_pos:(src_pos * elem_size)
+        ~dst
+        ~dst_pos:(dst_pos * elem_size)
+        ~len:(len * elem_size)
   end
 end
 
