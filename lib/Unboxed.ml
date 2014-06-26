@@ -189,15 +189,15 @@ module MonomorphicVariantArray = struct
       if offset < 0 || offset >= Array.length array then
         raise index_out_of_bounds;
       match elt with
-      | Data (constructor, value) ->
-         array.(offset) <- Obj.repr constructor;
-         primitive_set array (offset+1) value (width_of constructor)
+        | Data (constructor, value) ->
+           Array.unsafe_set array offset (Obj.repr constructor);
+           primitive_set array (offset+1) value (width_of constructor)
 
     let get array i =
       let offset = i * elem_size in
       if offset < 0 || offset >= Array.length array then
         raise index_out_of_bounds;
-      let constructor = Obj.obj (Array.get array offset) in
+      let constructor = Obj.obj (Array.unsafe_get array offset) in
       Data (constructor, primitive_get array (offset+1) (width_of constructor))
 
     let create n elt =
@@ -346,14 +346,14 @@ module PolymorphicVariantArray = struct
         raise index_out_of_bounds;
       match elt with
       | Data (constructor, value) ->
-         array.(offset) <- Obj.repr constructor;
+         Array.unsafe_set array offset (Obj.repr constructor);
          primitive_set array (offset+1) value (width_of constructor)
 
     let get array i =
       let offset = i * elem_size in
       if offset < 0 || offset >= Array.length array then
         raise index_out_of_bounds;
-      let constructor = Obj.obj (Array.get array offset) in
+      let constructor = Obj.obj (Array.unsafe_get array offset) in
       Data (constructor, primitive_get array (offset+1) (width_of constructor))
 
     let create n elt =
