@@ -130,8 +130,7 @@ module TupleArray : sig
   module type Element_Descriptor =
     sig
       type t
-      type size
-      val width : (t,size) width
+      val width : (t,_) width
     end
 
   module type S =
@@ -156,8 +155,7 @@ module PartialTupleArray : sig
   module type Element_Descriptor =
     sig
       type t
-      type size
-      val width : (t,size) width
+      val width : (t,_) width
     end
 
   module type S =
