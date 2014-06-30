@@ -496,7 +496,7 @@ module TupleArray = struct
     open Elt
 
     let elt_size =
-      int_of_width width
+      max 1 (int_of_width width)
 
     type t = Obj.t array
 
@@ -551,7 +551,7 @@ module PartialTupleArray = struct
     open Elt
 
     let elt_size =
-      int_of_width width
+      max 1 (int_of_width width)
 
     type t = Obj.t array
 
