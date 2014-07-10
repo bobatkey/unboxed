@@ -52,6 +52,8 @@ module MonomorphicVariantArray : sig
       val copy   : t -> t
       val map    : (elt -> elt) -> t -> t
       val mapi   : (int -> elt -> elt) -> t -> t
+      val fold_left : ('a -> elt -> 'a) -> 'a -> t -> 'a
+      val fold_right : (elt -> 'a -> 'a) -> t -> 'a -> 'a
       val blit   : src:t -> src_pos:int -> dst:t -> dst_pos:int -> len:int -> unit
     end
 
@@ -117,6 +119,8 @@ module PolymorphicVariantArray : sig
       val copy   : 'a t -> 'a t
       val map    : ('a elt -> 'b elt) -> 'a t -> 'b t
       val mapi   : (int -> 'a elt -> 'b elt) -> 'a t -> 'b t
+      val fold_left : ('a -> 'b elt -> 'a) -> 'a -> 'b t -> 'a
+      val fold_right : ('b elt -> 'a -> 'a) -> 'b t -> 'a -> 'a
       val blit   : src:'a t -> src_pos:int -> dst:'a t -> dst_pos:int -> len:int -> unit
     end
 

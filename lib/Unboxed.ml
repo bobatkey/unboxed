@@ -172,6 +172,8 @@ module MonomorphicVariantArray = struct
       val copy : t -> t
       val map : (elt -> elt) -> t -> t
       val mapi : (int -> elt -> elt) -> t -> t
+      val fold_left : ('a -> elt -> 'a) -> 'a -> t -> 'a
+      val fold_right : (elt -> 'a -> 'a) -> t -> 'a -> 'a
       val blit : src:t -> src_pos:int -> dst:t -> dst_pos:int -> len:int -> unit
     end
 
@@ -258,6 +260,36 @@ module MonomorphicVariantArray = struct
       in
       loop 0 0;
       array
+
+    let fold_left f a array =
+      let rec loop a offset =
+        if offset = Array.length array then
+          a
+        else
+          let constructor = Obj.obj (Array.unsafe_get array offset) in
+          let elt =
+            Data (constructor,
+                  primitive_get array (offset+1) (width_of constructor))
+          in
+          let a = f a elt in
+          loop a (offset+elem_size)
+      in
+      loop a 0
+
+    let fold_right f array a =
+      let rec loop a offset =
+        if offset < 0 then
+          a
+        else
+          let constructor = Obj.obj (Array.unsafe_get array offset) in
+          let elt =
+            Data (constructor,
+                  primitive_get array (offset+1) (width_of constructor))
+          in
+          let a = f elt a in
+          loop a (offset-elem_size)
+      in
+      loop a (Array.length array - elem_size)
 
     let blit ~src ~src_pos ~dst ~dst_pos ~len =
       ArrayLabels.blit
@@ -374,6 +406,8 @@ module PolymorphicVariantArray = struct
       val copy : 'a t -> 'a t
       val map : ('a elt -> 'b elt) -> 'a t -> 'b t
       val mapi : (int -> 'a elt -> 'b elt) -> 'a t -> 'b t
+      val fold_left : ('a -> 'b elt -> 'a) -> 'a -> 'b t -> 'a
+      val fold_right : ('b elt -> 'a -> 'a) -> 'b t -> 'a -> 'a
       val blit   : src:'a t -> src_pos:int -> dst:'a t -> dst_pos:int -> len:int -> unit
     end
 
@@ -460,6 +494,36 @@ module PolymorphicVariantArray = struct
       in
       loop 0 0;
       array
+
+    let fold_left f a array =
+      let rec loop a offset =
+        if offset = Array.length array then
+          a
+        else
+          let constructor = Obj.obj (Array.unsafe_get array offset) in
+          let elt =
+            Data (constructor,
+                  primitive_get array (offset+1) (width_of constructor))
+          in
+          let a = f a elt in
+          loop a (offset+elem_size)
+      in
+      loop a 0
+
+    let fold_right f array a =
+      let rec loop a offset =
+        if offset < 0 then
+          a
+        else
+          let constructor = Obj.obj (Array.unsafe_get array offset) in
+          let elt =
+            Data (constructor,
+                  primitive_get array (offset+1) (width_of constructor))
+          in
+          let a = f elt a in
+          loop a (offset-elem_size)
+      in
+      loop a (Array.length array - elem_size)
 
     let blit ~src ~src_pos ~dst ~dst_pos ~len =
       ArrayLabels.blit
