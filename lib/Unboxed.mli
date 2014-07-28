@@ -28,153 +28,143 @@ type (_, _) width =
 
 module MonomorphicVariantArray : sig
 
-  module type Element_Descriptor =
-    sig
-      type 'a constructor
-      type size
-      val size : size is_a_natural
-      val width_of : 'a constructor -> ('a, size) width
-      type t = Data : 'a constructor * 'a -> t
-    end
+  module type Element_Descriptor = sig
+    type 'a constructor
+    type size
+    val size : size is_a_natural
+    val width_of : 'a constructor -> ('a, size) width
+    type t = Data : 'a constructor * 'a -> t
+  end
 
-  module type S =
-    sig
-      module Elt : Element_Descriptor
+  module type S = sig
+    module Elt : Element_Descriptor
 
-      type t
-      type elt = Elt.t
-      val empty  : t
-      val create : int -> elt -> t
-      val init   : int -> (int -> elt) -> t
-      val get    : t -> int -> elt
-      val set    : t -> int -> elt -> unit
-      val length : t -> int
-      val copy   : t -> t
-      val map    : (elt -> elt) -> t -> t
-      val mapi   : (int -> elt -> elt) -> t -> t
-      val fold_left : ('a -> elt -> 'a) -> 'a -> t -> 'a
-      val fold_right : (elt -> 'a -> 'a) -> t -> 'a -> 'a
-      val blit   : src:t -> src_pos:int -> dst:t -> dst_pos:int -> len:int -> unit
-    end
+    type t
+    type elt = Elt.t
+    val empty  : t
+    val create : int -> elt -> t
+    val init   : int -> (int -> elt) -> t
+    val get    : t -> int -> elt
+    val set    : t -> int -> elt -> unit
+    val length : t -> int
+    val copy   : t -> t
+    val map    : (elt -> elt) -> t -> t
+    val mapi   : (int -> elt -> elt) -> t -> t
+    val fold_left : ('a -> elt -> 'a) -> 'a -> t -> 'a
+    val fold_right : (elt -> 'a -> 'a) -> t -> 'a -> 'a
+    val blit   : src:t -> src_pos:int -> dst:t -> dst_pos:int -> len:int -> unit
+  end
 
   module Make (Elt : Element_Descriptor)
-         : S with module Elt = Elt
+    : S with module Elt = Elt
 end
 
 
 module MonomorphicVariantDynArray : sig
 
-  module type Element_Descriptor =
-    sig
-      type 'a constructor
-      type size
-      val size : size is_a_natural
-      val width_of : 'a constructor -> ('a, size) width
-      type t = Data : 'a constructor * 'a -> t
-    end
+  module type Element_Descriptor = sig
+    type 'a constructor
+    type size
+    val size : size is_a_natural
+    val width_of : 'a constructor -> ('a, size) width
+    type t = Data : 'a constructor * 'a -> t
+  end
 
-  module type S =
-    sig
-      module Elt : Element_Descriptor
+  module type S = sig
+    module Elt : Element_Descriptor
 
-      type t
-      type elt = Elt.t
-      val create : unit -> t
-      val add : t -> elt -> unit
-      val set : t -> int -> elt -> unit
-      val get : t -> int -> elt
-      val length : t -> int
-      val to_array : t -> MonomorphicVariantArray.Make(Elt).t
-      val copy : t -> t
-    end
+    type t
+    type elt = Elt.t
+    val create : unit -> t
+    val add : t -> elt -> unit
+    val set : t -> int -> elt -> unit
+    val get : t -> int -> elt
+    val length : t -> int
+    val to_array : t -> MonomorphicVariantArray.Make(Elt).t
+    val copy : t -> t
+  end
 
   module Make (Elt : Element_Descriptor)
-         : S with module Elt = Elt
+    : S with module Elt = Elt
 end
 
 (**{2 Packed arrays of polymorphic variant types} *)
 
 module PolymorphicVariantArray : sig
-  module type Element_Descriptor =
-    sig
-      type ('a,'d) constructor
-      type size
-      val size : size is_a_natural
-      val width_of : ('a,'d) constructor -> ('d,size) width
-      type 'a t = Data : ('a,'d) constructor * 'd -> 'a t
-    end
+  module type Element_Descriptor = sig
+    type ('a,'d) constructor
+    type size
+    val size : size is_a_natural
+    val width_of : ('a,'d) constructor -> ('d,size) width
+    type 'a t = Data : ('a,'d) constructor * 'd -> 'a t
+  end
 
-  module type S =
-    sig
-      module Elt : Element_Descriptor
+  module type S = sig
+    module Elt : Element_Descriptor
 
-      type 'a t
-      type 'a elt = 'a Elt.t
-      val empty  : 'a t
-      val create : int -> 'a elt -> 'a t
-      val init   : int -> (int -> 'a elt) -> 'a t
-      val get    : 'a t -> int -> 'a elt
-      val set    : 'a t -> int -> 'a elt -> unit
-      val length : 'a t -> int
-      val copy   : 'a t -> 'a t
-      val map    : ('a elt -> 'b elt) -> 'a t -> 'b t
-      val mapi   : (int -> 'a elt -> 'b elt) -> 'a t -> 'b t
-      val fold_left : ('a -> 'b elt -> 'a) -> 'a -> 'b t -> 'a
-      val fold_right : ('b elt -> 'a -> 'a) -> 'b t -> 'a -> 'a
-      val blit   : src:'a t -> src_pos:int -> dst:'a t -> dst_pos:int -> len:int -> unit
-    end
+    type 'a t
+    type 'a elt = 'a Elt.t
+    val empty  : 'a t
+    val create : int -> 'a elt -> 'a t
+    val init   : int -> (int -> 'a elt) -> 'a t
+    val get    : 'a t -> int -> 'a elt
+    val set    : 'a t -> int -> 'a elt -> unit
+    val length : 'a t -> int
+    val copy   : 'a t -> 'a t
+    val map    : ('a elt -> 'b elt) -> 'a t -> 'b t
+    val mapi   : (int -> 'a elt -> 'b elt) -> 'a t -> 'b t
+    val fold_left : ('a -> 'b elt -> 'a) -> 'a -> 'b t -> 'a
+    val fold_right : ('b elt -> 'a -> 'a) -> 'b t -> 'a -> 'a
+    val blit   : src:'a t -> src_pos:int -> dst:'a t -> dst_pos:int -> len:int -> unit
+  end
 
   module Make (Elt : Element_Descriptor)
-         : S with module Elt = Elt
+    : S with module Elt = Elt
 end
 
 (**{2 Arrays of unboxed tuples} *)
 
 module TupleArray : sig
-  module type Element_Descriptor =
-    sig
-      type t
-      val width : (t,_) width
-    end
+  module type Element_Descriptor = sig
+    type t
+    val width : (t,_) width
+  end
 
-  module type S =
-    sig
-      module Elt : Element_Descriptor
+  module type S = sig
+    module Elt : Element_Descriptor
 
-      type t
-      type elt = Elt.t
+    type t
+    type elt = Elt.t
 
-      val create : int -> (int -> elt) -> t
-      val get    : t -> int -> elt
-      val set    : t -> int -> elt -> unit
-    end
+    val create : int -> (int -> elt) -> t
+    val get    : t -> int -> elt
+    val set    : t -> int -> elt -> unit
+  end
 
   module Make (Elt : Element_Descriptor)
-         : S with module Elt = Elt
+    : S with module Elt = Elt
 end
 
 (**{2 Arrays of unboxed tuples with missing elements} *)
 
 module PartialTupleArray : sig
-  module type Element_Descriptor =
-    sig
-      type t
-      val width : (t,_) width
-    end
+  module type Element_Descriptor = sig
+    type t
+    val width : (t,_) width
+  end
 
-  module type S =
-    sig
-      module Elt : Element_Descriptor
+  module type S = sig
+    module Elt : Element_Descriptor
 
-      type t
-      type elt = Elt.t
+    type t
+    type elt = Elt.t
 
-      val create : int -> t
-      val get    : t -> int -> elt option
-      val set    : t -> int -> elt -> unit
-      val clear  : t -> int -> unit
-    end
+    val create : int -> t
+    val get    : t -> int -> elt option
+    val set    : t -> int -> elt -> unit
+    val clear  : t -> int -> unit
+  end
 
   module Make (Elt : Element_Descriptor)
-         : S with module Elt = Elt
+    : S with module Elt = Elt
 end

@@ -11,8 +11,8 @@ type _ is_a_natural =
 
 let rec int_of_natural : type n. n is_a_natural -> int =
   function
-  | Zero   -> 0
-  | Succ n -> 1 + int_of_natural n
+    | Zero   -> 0
+    | Succ n -> 1 + int_of_natural n
 
 type (_, _) width =
   | Width0 : (unit, 'n) width
@@ -24,158 +24,157 @@ type (_, _) width =
   | Width6 : ('a * 'b * 'c * 'd * 'e * 'f, 'n succ succ succ succ succ succ) width
   | Width7 : ('a * 'b * 'c * 'd * 'e * 'f * 'g, 'n succ succ succ succ succ succ succ) width
 
-let int_of_width (type a) (type s) : (a, s) width -> int = function
-  | Width0 -> 0
-  | Width1 -> 1
-  | Width2 -> 2
-  | Width3 -> 3
-  | Width4 -> 4
-  | Width5 -> 5
-  | Width6 -> 6
-  | Width7 -> 7
+let int_of_width (type a) (type s) : (a, s) width -> int =
+  function
+    | Width0 -> 0
+    | Width1 -> 1
+    | Width2 -> 2
+    | Width3 -> 3
+    | Width4 -> 4
+    | Width5 -> 5
+    | Width6 -> 6
+    | Width7 -> 7
 
 let primitive_get (type a) (type size) array offset : (a,size) width -> a =
   function
-  | Width0 -> ()
-  | Width1 -> (Obj.obj (Array.unsafe_get array (offset)))
-  | Width2 -> (Obj.obj (Array.unsafe_get array (offset)),
-               Obj.obj (Array.unsafe_get array (offset+1)))
-  | Width3 -> (Obj.obj (Array.unsafe_get array (offset)),
-               Obj.obj (Array.unsafe_get array (offset+1)),
-               Obj.obj (Array.unsafe_get array (offset+2)))
-  | Width4 -> (Obj.obj (Array.unsafe_get array (offset)),
-               Obj.obj (Array.unsafe_get array (offset+1)),
-               Obj.obj (Array.unsafe_get array (offset+2)),
-               Obj.obj (Array.unsafe_get array (offset+3)))
-  | Width5 -> (Obj.obj (Array.unsafe_get array (offset)),
-               Obj.obj (Array.unsafe_get array (offset+1)),
-               Obj.obj (Array.unsafe_get array (offset+2)),
-               Obj.obj (Array.unsafe_get array (offset+3)),
-               Obj.obj (Array.unsafe_get array (offset+4)))
-  | Width6 -> (Obj.obj (Array.unsafe_get array (offset)),
-               Obj.obj (Array.unsafe_get array (offset+1)),
-               Obj.obj (Array.unsafe_get array (offset+2)),
-               Obj.obj (Array.unsafe_get array (offset+3)),
-               Obj.obj (Array.unsafe_get array (offset+4)),
-               Obj.obj (Array.unsafe_get array (offset+5)))
-  | Width7 -> (Obj.obj (Array.unsafe_get array (offset)),
-               Obj.obj (Array.unsafe_get array (offset+1)),
-               Obj.obj (Array.unsafe_get array (offset+2)),
-               Obj.obj (Array.unsafe_get array (offset+3)),
-               Obj.obj (Array.unsafe_get array (offset+4)),
-               Obj.obj (Array.unsafe_get array (offset+5)),
-               Obj.obj (Array.unsafe_get array (offset+6)))
+    | Width0 -> ()
+    | Width1 -> (Obj.obj (Array.unsafe_get array (offset)))
+    | Width2 -> (Obj.obj (Array.unsafe_get array (offset)),
+                 Obj.obj (Array.unsafe_get array (offset+1)))
+    | Width3 -> (Obj.obj (Array.unsafe_get array (offset)),
+                 Obj.obj (Array.unsafe_get array (offset+1)),
+                 Obj.obj (Array.unsafe_get array (offset+2)))
+    | Width4 -> (Obj.obj (Array.unsafe_get array (offset)),
+                 Obj.obj (Array.unsafe_get array (offset+1)),
+                 Obj.obj (Array.unsafe_get array (offset+2)),
+                 Obj.obj (Array.unsafe_get array (offset+3)))
+    | Width5 -> (Obj.obj (Array.unsafe_get array (offset)),
+                 Obj.obj (Array.unsafe_get array (offset+1)),
+                 Obj.obj (Array.unsafe_get array (offset+2)),
+                 Obj.obj (Array.unsafe_get array (offset+3)),
+                 Obj.obj (Array.unsafe_get array (offset+4)))
+    | Width6 -> (Obj.obj (Array.unsafe_get array (offset)),
+                 Obj.obj (Array.unsafe_get array (offset+1)),
+                 Obj.obj (Array.unsafe_get array (offset+2)),
+                 Obj.obj (Array.unsafe_get array (offset+3)),
+                 Obj.obj (Array.unsafe_get array (offset+4)),
+                 Obj.obj (Array.unsafe_get array (offset+5)))
+    | Width7 -> (Obj.obj (Array.unsafe_get array (offset)),
+                 Obj.obj (Array.unsafe_get array (offset+1)),
+                 Obj.obj (Array.unsafe_get array (offset+2)),
+                 Obj.obj (Array.unsafe_get array (offset+3)),
+                 Obj.obj (Array.unsafe_get array (offset+4)),
+                 Obj.obj (Array.unsafe_get array (offset+5)),
+                 Obj.obj (Array.unsafe_get array (offset+6)))
 
 let primitive_set (type a) (type size) array offset (value : a) (width : (a,size) width) =
   match width, value with
-  | Width0, ()    ->
-     ()
-  | Width1, a     ->
-     Array.unsafe_set array (offset) (Obj.repr a)
-  | Width2, (a,b) ->
-     Array.unsafe_set array (offset) (Obj.repr a);
-     Array.unsafe_set array (offset+1) (Obj.repr b)
-  | Width3, (a,b,c) ->
-     Array.unsafe_set array (offset) (Obj.repr a);
-     Array.unsafe_set array (offset+1) (Obj.repr b);
-     Array.unsafe_set array (offset+2) (Obj.repr c)
-  | Width4, (a,b,c,d) ->
-     Array.unsafe_set array (offset) (Obj.repr a);
-     Array.unsafe_set array (offset+1) (Obj.repr b);
-     Array.unsafe_set array (offset+2) (Obj.repr c);
-     Array.unsafe_set array (offset+3) (Obj.repr d)
-  | Width5, (a,b,c,d,e) ->
-     Array.unsafe_set array (offset) (Obj.repr a);
-     Array.unsafe_set array (offset+1) (Obj.repr b);
-     Array.unsafe_set array (offset+2) (Obj.repr c);
-     Array.unsafe_set array (offset+3) (Obj.repr d);
-     Array.unsafe_set array (offset+4) (Obj.repr e)
-  | Width6, (a,b,c,d,e,f) ->
-     Array.unsafe_set array (offset) (Obj.repr a);
-     Array.unsafe_set array (offset+1) (Obj.repr b);
-     Array.unsafe_set array (offset+2) (Obj.repr c);
-     Array.unsafe_set array (offset+3) (Obj.repr d);
-     Array.unsafe_set array (offset+4) (Obj.repr e);
-     Array.unsafe_set array (offset+5) (Obj.repr f);
-  | Width7, (a,b,c,d,e,f,g) ->
-     Array.unsafe_set array (offset) (Obj.repr a);
-     Array.unsafe_set array (offset+1) (Obj.repr b);
-     Array.unsafe_set array (offset+2) (Obj.repr c);
-     Array.unsafe_set array (offset+3) (Obj.repr d);
-     Array.unsafe_set array (offset+4) (Obj.repr e);
-     Array.unsafe_set array (offset+5) (Obj.repr f);
-     Array.unsafe_set array (offset+6) (Obj.repr g)
+    | Width0, ()    ->
+       ()
+    | Width1, a     ->
+       Array.unsafe_set array (offset) (Obj.repr a)
+    | Width2, (a,b) ->
+       Array.unsafe_set array (offset) (Obj.repr a);
+       Array.unsafe_set array (offset+1) (Obj.repr b)
+    | Width3, (a,b,c) ->
+       Array.unsafe_set array (offset) (Obj.repr a);
+       Array.unsafe_set array (offset+1) (Obj.repr b);
+       Array.unsafe_set array (offset+2) (Obj.repr c)
+    | Width4, (a,b,c,d) ->
+       Array.unsafe_set array (offset) (Obj.repr a);
+       Array.unsafe_set array (offset+1) (Obj.repr b);
+       Array.unsafe_set array (offset+2) (Obj.repr c);
+       Array.unsafe_set array (offset+3) (Obj.repr d)
+    | Width5, (a,b,c,d,e) ->
+       Array.unsafe_set array (offset) (Obj.repr a);
+       Array.unsafe_set array (offset+1) (Obj.repr b);
+       Array.unsafe_set array (offset+2) (Obj.repr c);
+       Array.unsafe_set array (offset+3) (Obj.repr d);
+       Array.unsafe_set array (offset+4) (Obj.repr e)
+    | Width6, (a,b,c,d,e,f) ->
+       Array.unsafe_set array (offset) (Obj.repr a);
+       Array.unsafe_set array (offset+1) (Obj.repr b);
+       Array.unsafe_set array (offset+2) (Obj.repr c);
+       Array.unsafe_set array (offset+3) (Obj.repr d);
+       Array.unsafe_set array (offset+4) (Obj.repr e);
+       Array.unsafe_set array (offset+5) (Obj.repr f);
+    | Width7, (a,b,c,d,e,f,g) ->
+       Array.unsafe_set array (offset) (Obj.repr a);
+       Array.unsafe_set array (offset+1) (Obj.repr b);
+       Array.unsafe_set array (offset+2) (Obj.repr c);
+       Array.unsafe_set array (offset+3) (Obj.repr d);
+       Array.unsafe_set array (offset+4) (Obj.repr e);
+       Array.unsafe_set array (offset+5) (Obj.repr f);
+       Array.unsafe_set array (offset+6) (Obj.repr g)
 
 let primitive_unset (type a) (type size) array offset (width : (a,size) width) : unit =
   match width with
-  | Width0    ->
-     ()
-  | Width1     ->
-     Array.unsafe_set array (offset) (Obj.repr 0)
-  | Width2 ->
-     Array.unsafe_set array (offset) (Obj.repr 0);
-     Array.unsafe_set array (offset+1) (Obj.repr 0)
-  | Width3 ->
-     Array.unsafe_set array (offset) (Obj.repr 0);
-     Array.unsafe_set array (offset+1) (Obj.repr 0);
-     Array.unsafe_set array (offset+2) (Obj.repr 0)
-  | Width4 ->
-     Array.unsafe_set array (offset) (Obj.repr 0);
-     Array.unsafe_set array (offset+1) (Obj.repr 0);
-     Array.unsafe_set array (offset+2) (Obj.repr 0);
-     Array.unsafe_set array (offset+3) (Obj.repr 0)
-  | Width5 ->
-     Array.unsafe_set array (offset) (Obj.repr 0);
-     Array.unsafe_set array (offset+1) (Obj.repr 0);
-     Array.unsafe_set array (offset+2) (Obj.repr 0);
-     Array.unsafe_set array (offset+3) (Obj.repr 0);
-     Array.unsafe_set array (offset+4) (Obj.repr 0)
-  | Width6 ->
-     Array.unsafe_set array (offset) (Obj.repr 0);
-     Array.unsafe_set array (offset+1) (Obj.repr 0);
-     Array.unsafe_set array (offset+2) (Obj.repr 0);
-     Array.unsafe_set array (offset+3) (Obj.repr 0);
-     Array.unsafe_set array (offset+4) (Obj.repr 0);
-     Array.unsafe_set array (offset+5) (Obj.repr 0)
-  | Width7 ->
-     Array.unsafe_set array (offset) (Obj.repr 0);
-     Array.unsafe_set array (offset+1) (Obj.repr 0);
-     Array.unsafe_set array (offset+2) (Obj.repr 0);
-     Array.unsafe_set array (offset+3) (Obj.repr 0);
-     Array.unsafe_set array (offset+4) (Obj.repr 0);
-     Array.unsafe_set array (offset+5) (Obj.repr 0);
-     Array.unsafe_set array (offset+6) (Obj.repr 0)
+    | Width0    ->
+       ()
+    | Width1     ->
+       Array.unsafe_set array (offset) (Obj.repr 0)
+    | Width2 ->
+       Array.unsafe_set array (offset) (Obj.repr 0);
+       Array.unsafe_set array (offset+1) (Obj.repr 0)
+    | Width3 ->
+       Array.unsafe_set array (offset) (Obj.repr 0);
+       Array.unsafe_set array (offset+1) (Obj.repr 0);
+       Array.unsafe_set array (offset+2) (Obj.repr 0)
+    | Width4 ->
+       Array.unsafe_set array (offset) (Obj.repr 0);
+       Array.unsafe_set array (offset+1) (Obj.repr 0);
+       Array.unsafe_set array (offset+2) (Obj.repr 0);
+       Array.unsafe_set array (offset+3) (Obj.repr 0)
+    | Width5 ->
+       Array.unsafe_set array (offset) (Obj.repr 0);
+       Array.unsafe_set array (offset+1) (Obj.repr 0);
+       Array.unsafe_set array (offset+2) (Obj.repr 0);
+       Array.unsafe_set array (offset+3) (Obj.repr 0);
+       Array.unsafe_set array (offset+4) (Obj.repr 0)
+    | Width6 ->
+       Array.unsafe_set array (offset) (Obj.repr 0);
+       Array.unsafe_set array (offset+1) (Obj.repr 0);
+       Array.unsafe_set array (offset+2) (Obj.repr 0);
+       Array.unsafe_set array (offset+3) (Obj.repr 0);
+       Array.unsafe_set array (offset+4) (Obj.repr 0);
+       Array.unsafe_set array (offset+5) (Obj.repr 0)
+    | Width7 ->
+       Array.unsafe_set array (offset) (Obj.repr 0);
+       Array.unsafe_set array (offset+1) (Obj.repr 0);
+       Array.unsafe_set array (offset+2) (Obj.repr 0);
+       Array.unsafe_set array (offset+3) (Obj.repr 0);
+       Array.unsafe_set array (offset+4) (Obj.repr 0);
+       Array.unsafe_set array (offset+5) (Obj.repr 0);
+       Array.unsafe_set array (offset+6) (Obj.repr 0)
 
 (**********************************************************************)
 module MonomorphicVariantArray = struct
-  module type Element_Descriptor =
-    sig
-      type 'a constructor
-      type size
-      val size : size is_a_natural
-      val width_of : 'a constructor -> ('a, size) width
-      type t = Data : 'a constructor * 'a -> t
-    end
+  module type Element_Descriptor = sig
+    type 'a constructor
+    type size
+    val size : size is_a_natural
+    val width_of : 'a constructor -> ('a, size) width
+    type t = Data : 'a constructor * 'a -> t
+  end
 
-  module type S =
-    sig
-      module Elt : Element_Descriptor
+  module type S = sig
+    module Elt : Element_Descriptor
 
-      type t
-      type elt = Elt.t
-      val empty : t
-      val create : int -> elt -> t
-      val init : int -> (int -> elt) -> t
-      val get : t -> int -> elt
-      val set : t -> int -> elt -> unit
-      val length : t -> int
-      val copy : t -> t
-      val map : (elt -> elt) -> t -> t
-      val mapi : (int -> elt -> elt) -> t -> t
-      val fold_left : ('a -> elt -> 'a) -> 'a -> t -> 'a
-      val fold_right : (elt -> 'a -> 'a) -> t -> 'a -> 'a
-      val blit : src:t -> src_pos:int -> dst:t -> dst_pos:int -> len:int -> unit
-    end
+    type t
+    type elt = Elt.t
+    val empty : t
+    val create : int -> elt -> t
+    val init : int -> (int -> elt) -> t
+    val get : t -> int -> elt
+    val set : t -> int -> elt -> unit
+    val length : t -> int
+    val copy : t -> t
+    val map : (elt -> elt) -> t -> t
+    val mapi : (int -> elt -> elt) -> t -> t
+    val fold_left : ('a -> elt -> 'a) -> 'a -> t -> 'a
+    val fold_right : (elt -> 'a -> 'a) -> t -> 'a -> 'a
+    val blit : src:t -> src_pos:int -> dst:t -> dst_pos:int -> len:int -> unit
+  end
 
   module Make (D : Element_Descriptor) = struct
     module Elt = D
@@ -303,29 +302,27 @@ end
 
 (**********************************************************************)
 module MonomorphicVariantDynArray = struct
-  module type Element_Descriptor =
-    sig
-      type 'a constructor
-      type size
-      val size : size is_a_natural
-      val width_of : 'a constructor -> ('a, size) width
-      type t = Data : 'a constructor * 'a -> t
-    end
+  module type Element_Descriptor = sig
+    type 'a constructor
+    type size
+    val size : size is_a_natural
+    val width_of : 'a constructor -> ('a, size) width
+    type t = Data : 'a constructor * 'a -> t
+  end
 
-  module type S =
-    sig
-      module Elt : Element_Descriptor
+  module type S = sig
+    module Elt : Element_Descriptor
 
-      type t
-      type elt = Elt.t
-      val create : unit -> t
-      val add : t -> elt -> unit
-      val set : t -> int -> elt -> unit
-      val get : t -> int -> elt
-      val length : t -> int
-      val to_array : t -> MonomorphicVariantArray.Make(Elt).t
-      val copy : t -> t
-    end
+    type t
+    type elt = Elt.t
+    val create : unit -> t
+    val add : t -> elt -> unit
+    val set : t -> int -> elt -> unit
+    val get : t -> int -> elt
+    val length : t -> int
+    val to_array : t -> MonomorphicVariantArray.Make(Elt).t
+    val copy : t -> t
+  end
 
   module Make (D : Element_Descriptor) = struct
     module Elt = D
@@ -336,9 +333,9 @@ module MonomorphicVariantDynArray = struct
     let elem_size = 1 + int_of_natural size
 
     type t =
-        { mutable elements : Obj.t array
-        ; mutable end_ptr  : int
-        }
+      { mutable elements : Obj.t array
+      ; mutable end_ptr  : int
+      }
 
     type elt = D.t
 
@@ -382,34 +379,32 @@ end
 
 (**********************************************************************)
 module PolymorphicVariantArray = struct
-  module type Element_Descriptor =
-    sig
-      type ('a,'d) constructor
-      type size
-      val size : size is_a_natural
-      val width_of : ('a,'d) constructor -> ('d,size) width
-      type 'a t = Data : ('a,'d) constructor * 'd -> 'a t
-    end
+  module type Element_Descriptor = sig
+    type ('a,'d) constructor
+    type size
+    val size : size is_a_natural
+    val width_of : ('a,'d) constructor -> ('d,size) width
+    type 'a t = Data : ('a,'d) constructor * 'd -> 'a t
+  end
 
-  module type S =
-    sig
-      module Elt : Element_Descriptor
+  module type S = sig
+    module Elt : Element_Descriptor
 
-      type 'a t
-      type 'a elt = 'a Elt.t
-      val empty : 'a t
-      val create : int -> 'a elt -> 'a t
-      val init : int -> (int -> 'a elt) -> 'a t
-      val get : 'a t -> int -> 'a elt
-      val set : 'a t -> int -> 'a elt -> unit
-      val length : 'a t -> int
-      val copy : 'a t -> 'a t
-      val map : ('a elt -> 'b elt) -> 'a t -> 'b t
-      val mapi : (int -> 'a elt -> 'b elt) -> 'a t -> 'b t
-      val fold_left : ('a -> 'b elt -> 'a) -> 'a -> 'b t -> 'a
-      val fold_right : ('b elt -> 'a -> 'a) -> 'b t -> 'a -> 'a
-      val blit   : src:'a t -> src_pos:int -> dst:'a t -> dst_pos:int -> len:int -> unit
-    end
+    type 'a t
+    type 'a elt = 'a Elt.t
+    val empty : 'a t
+    val create : int -> 'a elt -> 'a t
+    val init : int -> (int -> 'a elt) -> 'a t
+    val get : 'a t -> int -> 'a elt
+    val set : 'a t -> int -> 'a elt -> unit
+    val length : 'a t -> int
+    val copy : 'a t -> 'a t
+    val map : ('a elt -> 'b elt) -> 'a t -> 'b t
+    val mapi : (int -> 'a elt -> 'b elt) -> 'a t -> 'b t
+    val fold_left : ('a -> 'b elt -> 'a) -> 'a -> 'b t -> 'a
+    val fold_right : ('b elt -> 'a -> 'a) -> 'b t -> 'a -> 'a
+    val blit   : src:'a t -> src_pos:int -> dst:'a t -> dst_pos:int -> len:int -> unit
+  end
 
   module Make (D : Element_Descriptor) = struct
     module Elt = D
@@ -428,9 +423,9 @@ module PolymorphicVariantArray = struct
       if offset < 0 || offset >= Array.length array then
         raise index_out_of_bounds;
       match elt with
-      | Data (constructor, value) ->
-         Array.unsafe_set array offset (Obj.repr constructor);
-         primitive_set array (offset+1) value (width_of constructor)
+        | Data (constructor, value) ->
+           Array.unsafe_set array offset (Obj.repr constructor);
+           primitive_set array (offset+1) value (width_of constructor)
 
     let get array i =
       let offset = i * elem_size in
@@ -537,23 +532,21 @@ end
 
 (**********************************************************************)
 module TupleArray = struct
-  module type Element_Descriptor =
-    sig
-      type t
-      val width : (t,_) width
-    end
+  module type Element_Descriptor = sig
+    type t
+    val width : (t,_) width
+  end
 
-  module type S =
-    sig
-      module Elt : Element_Descriptor
+  module type S = sig
+    module Elt : Element_Descriptor
 
-      type t
-      type elt = Elt.t
+    type t
+    type elt = Elt.t
 
-      val create : int -> (int -> elt) -> t
-      val get    : t -> int -> elt
-      val set    : t -> int -> elt -> unit
-    end
+    val create : int -> (int -> elt) -> t
+    val get    : t -> int -> elt
+    val set    : t -> int -> elt -> unit
+  end
 
   module Make (Elt : Element_Descriptor) = struct
     module Elt = Elt
@@ -591,24 +584,22 @@ module TupleArray = struct
 end
 
 module PartialTupleArray = struct
-  module type Element_Descriptor =
-    sig
-      type t
-      val width : (t,_) width
-    end
+  module type Element_Descriptor = sig
+    type t
+    val width : (t,_) width
+  end
 
-  module type S =
-    sig
-      module Elt : Element_Descriptor
+  module type S = sig
+    module Elt : Element_Descriptor
 
-      type t
-      type elt = Elt.t
+    type t
+    type elt = Elt.t
 
-      val create : int -> t
-      val get    : t -> int -> elt option
-      val set    : t -> int -> elt -> unit
-      val clear  : t -> int -> unit
-    end
+    val create : int -> t
+    val get    : t -> int -> elt option
+    val set    : t -> int -> elt -> unit
+    val clear  : t -> int -> unit
+  end
 
   module Make (Elt : Element_Descriptor) = struct
     module Elt = Elt
